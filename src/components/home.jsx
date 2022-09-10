@@ -132,7 +132,7 @@ const Home = () => {
                   image={ele.imageUrl}
                   url={ele.url}
                   publishedDate={ele.publishedDate}
-                  likes={ele.likes}
+                  likes={parseInt(ele.likes)}
                   fav={fav}
                 />
               </Grid>
@@ -151,7 +151,6 @@ const NewsCard = (props) => {
 
   React.useEffect(() => {
     if (localStorage.getItem("favs")) {
-      console.log(JSON.parse(localStorage.getItem("favs")));
       localStorage.setItem("favs", JSON.stringify(fav));
       console.log("fav", fav);
     }
@@ -160,7 +159,6 @@ const NewsCard = (props) => {
     const newEle = e.currentTarget.value;
     fav.push(newEle);
     localStorage.setItem("favs", JSON.stringify(fav));
-    console.log("liked this one", newEle);
   };
   return (
     <Card style={{ maxWidth: "400px", margin: "10px 20px" }}>
@@ -198,7 +196,13 @@ const NewsCard = (props) => {
           <FavoriteIcon
             style={{ color: likes > 0 ? "red" : "grey", gap: "2px" }}
           />
-          {likes > 0 && <>{likes}</>}
+          {likes > 0 && fav.includes(url) ? (
+            <>{likes + 1}</>
+          ) : likes > 0 && !fav.includes(url) ? (
+            <>{likes + 1}</>
+          ) : (
+            likes === 0 && fav.includes(url) && <> 1 </>
+          )}
         </Button>
         <Button
           size="small"
